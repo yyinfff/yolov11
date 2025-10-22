@@ -1,6 +1,17 @@
 # yaml
-path: /public/home/yuyf/yuyf/yolo/ultralytics-main/TomatoDiseaseDataset # dataset root dir
-train: images/train # train images (relative to 'path')
-val: images/val # val images (relative to 'path')
-test: images/test # test images (relative to 'path')
-names: ['GrayMold（灰霉病）','Viral（病毒病）','Wilt（枯萎病）']
+path: /public/home/yuyf/yuyf/yolo/ultralytics-main/tomato_dataset # dataset root dir
+train: train # train images (relative to 'path')
+val: val # val images (relative to 'path')
+test: test # test images (relative to 'path')
+nc: 9
+
+names:
+    - 'Early_Blight(早疫病)'
+    - 'Healthy(健康)'
+    - 'Late_Blight(晚疫病)'
+    - 'Leaf_Miner(潜叶虫)'
+    - 'Leaf_Mold(叶霉病)'
+    - 'Mosaic_V(花叶病毒)'
+    - 'Septoria(壳针孢病)'
+    - 'Spider_M(红蜘蛛)'
+    - 'YLCV(黄化卷叶病毒)'
