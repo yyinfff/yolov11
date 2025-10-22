@@ -6,5 +6,5 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-/TomatoDiseaseDataset
-/tomato_dataset
+/ultralytics-main/TomatoDiseaseDataset/
+/ultralytics-main/tomato_dataset/
