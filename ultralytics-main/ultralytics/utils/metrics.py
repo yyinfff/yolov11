@@ -58,7 +58,58 @@ def piou(box1, box2, xywh=True, PIoU=False, PIoU2=False, Lambda=1.3, eps=1e-7):
         x=q*Lambda
         return 1 - 3*x*torch.exp(-x**2)*piou_v1
 
+#改进
+"""
+def piou(
+    box1,
+    box2,
+    xywh=True,
+    PIoU=False,
+    PIoU2=False,
+    Lambda=1.3,
+    sigma=2.0,   # ⭐ 新增参数
+    eps=1e-7
+):
+    # Get the coordinates of bounding boxes
+    if xywh:
+        (x1, y1, w1, h1), (x2, y2, w2, h2) = box1.chunk(4, -1), box2.chunk(4, -1)
+        w1_, h1_, w2_, h2_ = w1 / 2, h1 / 2, w2 / 2, h2 / 2
+        b1_x1, b1_x2, b1_y1, b1_y2 = x1 - w1_, x1 + w1_, y1 - h1_, y1 + h1_
+        b2_x1, b2_x2, b2_y1, b2_y2 = x2 - w2_, x2 + w2_, y2 - h2_, y2 + h2_
+    else:
+        b1_x1, b1_y1, b1_x2, b1_y2 = box1.chunk(4, -1)
+        b2_x1, b2_y1, b2_x2, b2_y2 = box2.chunk(4, -1)
+        w1, h1 = b1_x2 - b1_x1, b1_y2 - b1_y1 + eps
+        w2, h2 = b2_x2 - b2_x1, b2_y2 - b2_y1 + eps
 
+    # IoU
+    inter = (b1_x2.minimum(b2_x2) - b1_x1.maximum(b2_x1)).clamp(0) * \
+            (b1_y2.minimum(b2_y2) - b1_y1.maximum(b2_y1)).clamp(0)
+    union = w1 * h1 + w2 * h2 - inter + eps
+    iou = inter / union
+
+    # PIoU boundary term
+    dw1 = torch.abs(b1_x1 - b2_x1)
+    dw2 = torch.abs(b1_x2 - b2_x2)
+    dh1 = torch.abs(b1_y1 - b2_y1)
+    dh2 = torch.abs(b1_y2 - b2_y2)
+
+    P = ((dw1 + dw2) / (torch.abs(w2) + eps) +
+         (dh1 + dh2) / (torch.abs(h2) + eps)) / 4
+
+    # ⭐ 这里是“唯一的改进点”
+    boundary_penalty = 1 - torch.exp(-(P ** 2) / sigma)
+
+    # 等价于你原来的 loss 形式，但更清晰
+    loss = (1 - iou) + boundary_penalty
+
+    if PIoU:
+        return loss
+    elif PIoU2:
+        q = torch.exp(-P)
+        x = q * Lambda
+        return (1 - 3 * x * torch.exp(-x ** 2) * (1 - loss)).clamp_(0)
+        """
 def bbox_ioa(box1, box2, iou=False, eps=1e-7):
     """
     Calculate the intersection over box2 area given box1 and box2. Boxes are in x1y1x2y2 format.

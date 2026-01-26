@@ -262,7 +262,7 @@ class BaseModel(torch.nn.Module):
         self = super()._apply(fn)
         m = self.model[-1]  # Detect()
         if isinstance(
-            m, (Detect,DyHead)
+            m, (Detect,DyHead,Detect_ASFF,Detect_AFPN3,Detect_AFPN4)
         ):  # includes all Detect subclasses like Segment, Pose, OBB, WorldDetect, YOLOEDetect, YOLOESegment
             m.stride = fn(m.stride)
             m.anchors = fn(m.anchors)
@@ -337,7 +337,7 @@ class DetectionModel(BaseModel):
 
         # Build strides
         m = self.model[-1]  # Detect()
-        if isinstance(m, (Detect,DyHead)):  # includes all Detect subclasses like Segment, Pose, OBB, YOLOEDetect, YOLOESegment
+        if isinstance(m, (Detect,DyHead,Detect_ASFF,Detect_AFPN3,Detect_AFPN4)):  # includes all Detect subclasses like Segment, Pose, OBB, YOLOEDetect, YOLOESegment
             s = 256  # 2x min stride
             m.inplace = self.inplace
 
@@ -1479,7 +1479,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
         elif m in frozenset(
-            {Detect, WorldDetect, YOLOEDetect, Segment, YOLOESegment, Pose, OBB, ImagePoolingAttn, v10Detect, DyHead}
+            {Detect, WorldDetect, YOLOEDetect, Segment, YOLOESegment, Pose, OBB, ImagePoolingAttn, v10Detect, DyHead,Detect_ASFF,Detect_AFPN3,Detect_AFPN4}
         ):
             args.append([ch[x] for x in f])
             if m is Segment or m is YOLOESegment:
@@ -1604,7 +1604,7 @@ def guess_model_task(model):
                 return "pose"
             elif isinstance(m, OBB):
                 return "obb"
-            elif isinstance(m, (Detect, WorldDetect, YOLOEDetect, v10Detect,DyHead)):
+            elif isinstance(m, (Detect, WorldDetect, YOLOEDetect, v10Detect,DyHead,Detect_ASFF,Detect_AFPN3,Detect_AFPN4)):
                 return "detect"
 
     # Guess from model filename

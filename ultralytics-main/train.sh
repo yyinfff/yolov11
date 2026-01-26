@@ -18,7 +18,10 @@ export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
 #python ./huidu.py
 #python ./tran.py
 #python ./cuda.py
-python ./train.py
+#python ./train.py
+#python ./trainasff.py
+#python ./trainafpn3.py
+python ./trainafpn4.py
 nvidia-smi
 python - <<'PY'
 import torch, sys

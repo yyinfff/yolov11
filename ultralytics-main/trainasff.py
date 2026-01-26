@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 if __name__ == '__main__':
-    model = YOLO(r'yolov11old.yaml', task='detect')  # 此处以 m 为例，只需写yolov11m即可定位到m模型
+    model = YOLO(r'yolov11asff.yaml', task='detect')  # 此处以 m 为例，只需写yolov11m即可定位到m模型
     # model.load('yolov11m.pt') # 是否加载预训练权重
     model.train(data=r'data.yaml',
                 imgsz=640,
